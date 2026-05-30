@@ -1,0 +1,8 @@
+not(isValidp1 == isStringp1)
+not(p1Null == 0)
+not(isValidp1 == 1)
+not(sizeof1 <= 10)
+not(sizeof1 >= 2)
+not(strlen1 <= 9)
+not(strlen1 >= 1)
+not(sizeof1 > strlen1)

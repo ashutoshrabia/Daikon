@@ -1,0 +1,16 @@
+PPT_NAME aprogram.point:::POINT
+p1Null
+p2Null
+isValidp1
+isValidp2
+isStringp1
+isStringp2
+isDisjointp1p2
+isDisjointp1p2 && (isStringp2==0)
+isDisjointp1p2 && isStringp1
+isStringp2 && isDisjointp1p2
+(isDisjointp1p2 == 0) && isStringp1
+isDisjointp1p2 && (isStringp1==0)
+(p1Null==0) && isValidp1 && isStringp1
+(p2Null==0) && isValidp2 && isStringp2
+(p2Null==0) && isValidp2

@@ -1,0 +1,10 @@
+isValidp1 == isStringp1
+p1Null == 0
+isValidp1 == 1
+sizeof1 <= 10
+sizeof1 >= 2
+strlen1 <= 9
+strlen1 >= 1
+ch <= 10
+ch >= 1
+sizeof1 > strlen1

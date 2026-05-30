@@ -1,0 +1,27 @@
+{
+    "parameters": {
+        "p1": "char pointer",
+        "p2": "char pointer",
+        "n": "size_t"
+    },
+    "name": "snprintf",
+    "return_type": "int",
+    "types_dict": {
+        "Bool": [
+            "p1Null",
+            "p2Null",
+            "isValidp1",
+            "isValidp2",
+            "isStringp1",
+            "isStringp2",
+            "isDisjointp1p2"
+        ],
+        "NumInt": [
+            "sizeof1",
+            "sizeof2",
+            "strlen1",
+            "strlen2",
+            "n"
+        ]
+    }
+}

@@ -1,0 +1,20 @@
+(isStringp2 == 1)  ==>  (isDisjointp1p2 == 0)
+(isDisjointp1p2 == 1)  ==>  (strlen1 > n)
+(isDisjointp1p2 == 1) ==> (strlen1 <= strlen2)
+(isDisjointp1p2 == 1)  ==>  (sizeof1 > n)
+(isValidp2 == 0)  ==>  (isDisjointp1p2 == 0)
+(isDisjointp1p2 == 1)  ==>  (strlen2 > n)
+p1Null == p2Null
+isValidp1 == isStringp1
+p1Null == 0
+isValidp1 == 1
+sizeof1 <= 10
+sizeof1 >= 3
+sizeof2 <= 10
+sizeof2 >= 1
+strlen1 == 2
+strlen2 <= 10
+strlen2 >= 1
+n <= 10
+n >= 1
+sizeof1 > strlen1

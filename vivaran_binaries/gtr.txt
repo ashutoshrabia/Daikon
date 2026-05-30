@@ -1,0 +1,387 @@
+1. str_cpy(p1,p2) (copies p2 to p1) : 
+	a. p1Null = p2Null = 0
+	b. isValidp1 = isValidp2 = 1
+	c. sizeof1 > strlen2
+	d. isStringp2 = 1
+	e. isStringp1 = 0 or isStringp1 = 1
+	f. isDisjointp1p2 = 1  (else strcpy operates on overlapping memory and it crashes)
+
+->  p1Null == false
+	p1Null == p2Null
+	isValidp1 == isValidp2
+	isValidp1 == isStringp2
+	isValidp1 == isDisjointp1p2
+	isValidp1 == true
+	sizeof1 > strlen2
+	sizeof2 > strlen2
+
+2. str_cat(p1, p2) (appends p2 at the end of p1) : 
+	a. p1Null = p2Null = 0
+	b. isValidp1 = isValidp2 = 1
+	c. isStringp1 = 1 (strcat checks '\0' at the end of p1)
+	d. isStringp2 = 1 (strcat always checks '\0' of the p2 to complete the strcat and it is not there , so it eventually tries to access unallocated memory block and hence fsanatize take action) 
+	e. sizeof1 > strlen1 + strlen2
+	f. isDisjointp1p2 = 1  (else strcat operates on overlapping memory and it crashes) 
+
+->  p1Null == p2Null
+	p1Null == false
+	isValidp1 == isValidp2
+	isValidp1 == true
+	isValidp1 == isStringp1
+	isValidp1 == isStringp2
+	isValidp1 == isDisjointp1p2
+	sizeof1 > strlen1
+	sizeof1 > strlen2
+	sizeof1 > strlen1+strlen2
+	
+
+3. str_cmp(p1, p2) (compares p1 and p2 and return 0 if p1 == p2 , return +ve if p1 > p2 else -ve) : 
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. isValidp2 = isDisjointp1p2 (if it is 0, then p2 = p1+2 and as isValidp1 = 1 hence p2 eventually becomes valid as isDisjointp1p2 = 0 . If it is 1, then there is no issue. Also if isValidp2 = 1 and isDisjointp1p2 = 0, then there is memory leak of original p2 allocated and fsanatize detects it and crashes. modern fsanatize comes with internal leak check)
+	d. if(isStringp1 == 0){
+		isStringp2 = 1;
+		sizeof1 > strlen2
+	}
+	e. if(isStringp2 == 0 && isDisjointp1p2 == 1){
+		isStringp1 = 1;
+		sizeof2 > strlen1
+	}
+
+->  p1Null == p2Null
+	p1Null == false
+	isValidp2 == isDisjointp1p2
+	isValidp1 == true
+	(isStringp1 == false)  ==>  (isStringp2 == true)
+	(isStringp1 == false)  ==>  (sizeof1 > strlen2)
+	(!isStringp2 && isDisjointp1p2)  ==>  (isStringp1 == true)
+	(!isStringp2 && isDisjointp1p2)  ==>  (sizeof2 > strlen1)
+
+
+4. str_str(p1, p2) (return first occurance of p2 in p1 else return null) :
+	a. p1Null = 0 = p2Null
+	b. isValidp1 = 1
+	c. if(isStringp2 == 0){
+			isDisjointp1p2 = 0;
+			isStringp1 = 1;
+		}
+	d. if(isStringp1 == 0){
+		isStringp2 = 1;
+		sizeof1 >= strlen2
+	}
+	e. isValidp2 = isDisjointp1p2
+	f. if(isValidp2 == 0){
+		isStringp1 = 1
+	}
+
+-> 	p1Null == p2Null
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+	(isStringp1 == false)  ==>  (isStringp2 == true)
+	(isStringp1 == false)  ==>  (sizeof1 >= strlen2)
+	(isStringp2 == false)  ==>  (isStringp1 == true)
+	(isStringp2 == false)  ==>  (isValidp2 == false)   // and as isValidp2 == isDisjointp1p2
+	(isValidp2 == false)  ==>  (isStringp1 == true)
+
+	
+
+5. str_spn(p1, p2) (return length of initial segment of p1 which consists only of characters from p2) : 
+	a. p2Null = 0 = p1Null
+	b. isValidp2 = isDisjointp1p2
+	c. isValidp1 = 1
+	d. isStringp1 = 1  // worst case, else there are cases where no crashes on isStringp1 = 0
+	e. if(isDisjointp1p2){
+		isStringp2 = 1;
+	}
+	
+->  p1Null == p2Null
+	isValidp1 == isStringp1
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+	(isValidp2 == true)  ==>  (isStringp2 == true)  // as isValidp2 == isDisjointp1p2
+
+6. str_cspn(p1, p2) (return length of initial segment of p1 which consists entirely of characters not found in p2) : 
+	a. p2Null = 0 = p1Null
+	b. isValidp2 = isDisjointp1p2
+	c. isValidp1 = 1
+	d. isStringp1 = 1 //worst case, else there are cases where no crashes on isStringp1 = 0
+	e. if(isDisjointp1p2){
+		isStringp2 = 1;
+	}
+
+->  p1Null == false
+	isValidp1 == true
+	p1Null == p2Null
+	isValidp1 == isStringp1
+	isValidp2 == isDisjointp1p2
+	(isValidp2 == true)  ==>  (isStringp2 == true)  // as isValidp2 == isDisjointp1p2
+
+7. str_pbrk(p1, p2) (searches for the first occurrence in a string of any of the specified characters and returns a pointer to that position in the string. It checks character of p1 , is it present in p2. If yes return that pointer else iterate with the rest of p1) : 
+	a. p2Null = 0 = p1Null
+	b. isValidp2 = isDisjointp1p2
+	c. isValidp1 = 1
+	d. isStringp1 = 1 //worst case, else there are cases where no crashes on isStringp1 = 0
+	e. if(isDisjointp1p2){
+		isStringp2 = 1;
+	}
+
+->  p1Null == p2Null
+	isValidp1 == isStringp1
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+	(isValidp2 == true)  ==>  (isStringp2 == true)
+
+8. str_tok(p1, p2) (returns char type pointer to the position of one of the tokens in the original string, or NULL if there are no more tokens) : 
+	a. p2Null = 0 = p1Null
+	b. isValidp2 = isDisjointp1p2
+	c. isValidp1 = 1
+	d. isStringp1 = 1 //worst case, else there are cases where no crashes on isStringp1 = 0
+	e. isStringp2 = 0 or 1 (bcz internally once it get's a garbage value it return without any error)
+
+->  p1Null == false
+	isValidp1 == true
+	p1Null == p2Null
+	isValidp1 == isStringp1
+	isValidp2 == isDisjointp1p2
+
+9. str_ncpy(p1,p2, n) (copies first n characters of p2 to p1) : 
+	if n==0 ,anything can happen because strncpy will not do anything , it just checks n==0 and then return without doing anything. Should we do n>0 in dataframe?
+	also string methods also works for '\0' if strlen2 < n, and this is not the case with mem functions
+
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. if(isDisjointp1p2 == 0){
+		n<=2 or (isStringp1 && 3<=strlen1<=4)      it will not crash on these inputs.
+	}	
+	d. if(isDisjointp1p2) sizeof2 > n
+	e. sizeof1 > n
+	f. isValidp2 = isDisjointp1p2
+
+->  p1Null == p2Null
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+	sizeof1 > n
+	(isValidp2 == true)  ==>  (sizeof2 > n)
+
+
+
+10. str_ncat(p1,p2,n) (appends first n characters of p2 to p1) : 
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. isStringp1 = 1 (strcat checks '\0' at the end of p1)
+	d. isValidp2 = isDisjointp1p2
+	e. sizeof1 > strlen1 + min(strlen2, n)
+	f. if(isStringp2 == 0){
+		sizeof2 > n
+	}
+
+->  p1Null == false
+	isValidp1 == true
+	p1Null == p2Null
+	isValidp1 == isStringp1
+	isValidp2 == isDisjointp1p2
+	(isStringp2 == false)  <==>  (sizeof2 > n)
+
+
+11. str_ncmp(p1,p2,n) (compares upto n characters from both strings and return 0, +ve or -ve) : 
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. isValidp2 = isDisjointp1p2 (if it is 0, then p2 = p1+2 and as isValidp1 = 1 hence p2 eventually becomes valid as isDisjointp1p2 = 0 . If it is 1, then there is no issue. )
+	d. isStringp1 = 0 or isStringp1 = 1
+	e. isStringp2 = 0 or isStringp2 = 1
+	f. if(isDisjointp1p2){
+		if(isStringp1 && isStringp2){
+			n could be anything
+		}
+		else if(isStringp1){
+			strlen1 <= sizeof2 || n <= sizeof2
+		}
+		else if(isStringp2){
+			strlen2 <= sizeof1 || n <= sizeof1
+		}
+		else{
+			n <= min(sizeof1, sizeof2)
+		}
+	}
+	g. if(isDisjointp1p2 == 0){
+		if(isStringp1){
+			n could be anything
+		}
+		else n <= sizeof1 - 2 (as we are assigning p2 = p1 + 2 in case of isDisjointp1p2 == 0)
+	}
+	
+
+12. mem_cpy(p1,p2, n) (copies first n characters of p2 to p1, unlike strncpy, it doesn't care about the null terminator of p1. It just copies first n bytes of p2 , that's it) : 
+    a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. if(isDisjointp1p2 == 0){
+		n<=2      it will not crash on these inputs.
+	}
+	d. n < sizeof2
+	e. n < sizeof1
+	f. isValidp2 = isDisjointp1p2
+
+->  p1Null == p2Null
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+	sizeof1 > n
+	sizeof2 > n
+	(isValidp2 == false)  ==>  (n <= 2)  // isDisjointp1p2 == isValidp2
+
+13. mem_move(p1,p2, n) (copy a specified number of bytes from a source memory location to a destination memory location. It has the ability to safely handle cases where the source and destination memory regions overlap) : 
+    a. if(!p1Null && isValidp1 && isStringp1) strlen1 < sizeof1
+	b. if(!p2Null && isValidp2 && isStringp2) strlen2 < sizeof2
+
+->  (!p1Null && isValidp1 && isStringp1)  ==>  (sizeof1 > strlen1)
+	(!p2Null && isValidp2 && isStringp2)  ==>  (sizeof2 > strlen2)
+
+14. mem_cmp(p1,p2,n) (compares the first n bytes of the memory block pointed to by s1 with the first n bytes of the memory block pointed to by s2) : 
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. isValidp2 = isDisjointp1p2 (if it is 0, then p2 = p1+2 and as isValidp1 = 1 hence p2 eventually becomes valid as isDisjointp1p2 = 0 . If it is 1, then there is no issue. )
+	d. if(isDisjointp1p2){
+		n <= min(sizeof1, sizeof2)
+	}
+	e. if(isDisjointp1p2 == 0){
+		n <= sizeof1 - 2 (as we are assigning p2 = p1 + 2 in case of isDisjointp1p2 == 0)
+	}
+	f. n < sizeof1
+
+->  p1Null == false
+	isValidp1 == true
+	p1Null == p2Null
+	isValidp2 == isDisjointp1p2
+	(isValidp2 == true)  ==>  (sizeof2 > n)
+	sizeof1 > n
+
+15. str_chr(p1, ch) (return pointer to the first occurance of ch) : 
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. if(ch is not in p1) isStringp1 = 1
+	   else isStringp1 = 0 or isStringp1 = 1
+
+->  p1Null == false
+	isValidp1 == true
+
+16. str_rchr(p1, ch) (return pointer to the last occurance of ch) : 
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. isStringp1 = 1
+
+->  isValidp1 == isStringp1
+	p1Null == false
+	isValidp1 == true
+
+17. mem_chr(p1, ch, n) (return a pointer to the first occurrence of ch within the first n bytes of p1) : 
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. sizeof1 >= n
+
+->  p1Null == false
+	isValidp1 == true
+	sizeof1 >= n
+
+18. at_oi(p1) (return an integer representation of string p1) : 
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. isStringp1 = 1
+	d. strlen1 < sizeof1
+
+->  p1Null == false
+	isValidp1 == true
+	sizeof1 > strlen1
+	isValidp1 == isStringp1
+
+19. str_len(p1) (return length of string p1) : 
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. isStringp1 = 1
+	d. strlen1 < sizeof1
+
+->  p1Null == false
+	isValidp1 == true
+	sizeof1 > strlen1
+	isValidp1 == isStringp1
+
+
+20. s_printf(p1,p2) (It is used to format data and store it into a character array (a string), rather than printing it to the console like printf()) :
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. if(p2Null==0 && isValidp2){
+		isStringp1 = 1
+		sizeof1 > strlen2
+	}
+
+->  p1Null == false
+	isValidp1 == true
+	(!p2Null && isValidp2)  ==>  (isStringp2 == true)
+	(!p2Null && isValidp2)  ==>  (sizeof1 > strlen2)
+
+
+21. sn_printf(p1,p2, n) (It is used to format data and store first n character (including the null pointer) it into a character array (a string), rather than printing it to the console like printf()) :
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. if(p2Null==0 && isValidp2){
+		isDisjointp1p2 = true
+		isStringp2 = true
+		sizeof1 >= min(n, strlen2)
+	}
+
+->  p1Null == false
+	isValidp1 == true
+	(!p2Null && isValidp2)  ==>  (isDisjointp1p2 == true)
+	(!p2Null && isValidp2)  ==>  (isStringp2 == true)
+
+
+22. at_ol(p1) (return an long representation of string p1) : 
+	a. p1Null = 0
+	b. isValidp1 = 1
+	c. isStringp1 = 1
+	d. strlen1 < sizeof1
+
+->  p1Null == false
+	isValidp1 == true
+	sizeof1 > strlen1
+	isValidp1 == isStringp1
+
+
+23. str_coll(p1,p2) (compares two strings according to the locale's collating sequence, which determines the order of characters and other language-specific rules , e^ and e are different):
+	// it internally solves the problem of accessing out of bound memory. Though strlen < sizeof because in this we are writing the out of bound memory which will result in error. It resolves only looking out of bound memory not writing. 
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. isValidp2 = isDisjointp1p2
+	
+->  p1Null == p2Null
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+
+
+24. str_lcpy(p1,p2) (safer alternative to strcpy() and strncpy() for copying strings. It is designed to prevent buffer overflows by taking the full size of the destination buffer as an argument and ensuring null-termination):
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. isValidp2 = isDisjointp1p2
+	
+->  p1Null == p2Null
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+
+25. str_lcat(p1,p2) ( concatenates two strings, appending a source string (src) to a destination string (dst) while ensuring the total length does not exceed a specified buffer size, and it always null-terminates the result if there is space):
+	a. p1Null = p2Null = 0
+	b. isValidp1 = 1
+	c. isValidp2 = isDisjointp1p2
+	
+->  p1Null == p2Null
+	isValidp2 == isDisjointp1p2
+	p1Null == false
+	isValidp1 == true
+
+# Simple characters, like ASCII, typically use one byte (8 bits) to represent characters, while wide characters, like those in UTF-16, use more memory (e.g., two or four bytes) to support a much larger range of international characters and symbols than simple character sets
+./testprog_exe 0 0 1 1 1 0 0 12 8 5 3 2>asan.txt || true head "-n" 200 asan.txt
+

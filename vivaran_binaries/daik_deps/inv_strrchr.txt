@@ -1,0 +1,28 @@
+(isValidp1)  ==>  (sizeof1 <= 10)
+(not(p1Null))  ==>  (sizeof1 <= 10)
+(not(p1Null))  ==>  (sizeof1 >= 2)
+(isStringp1)  ==>  (ch <= 10)
+(isStringp1)  ==>  (strlen1 <= 8)
+(not(p1Null))  ==>  (strlen1 <= 8)
+(isStringp1)  ==>  (strlen1 >= 1)
+(isStringp1)  ==>  (sizeof1 <= 10)
+(not(p1Null))  ==>  (ch <= 10)
+(isValidp1)  ==>  (ch >= 1)
+(isValidp1)  ==>  (sizeof1 >= 2)
+(not(p1Null))  ==>  (ch >= 1)
+(isStringp1)  ==>  (sizeof1 >= 2)
+(isStringp1)  ==>  (ch >= 1)
+(isValidp1)  ==>  (ch <= 10)
+(isValidp1)  ==>  (strlen1 >= 1)
+(not(p1Null))  ==>  (strlen1 >= 1)
+(isValidp1)  ==>  (strlen1 <= 8)
+isValidp1 == isStringp1
+p1Null == 0
+isValidp1 == 1
+sizeof1 <= 10
+sizeof1 >= 2
+strlen1 <= 8
+strlen1 >= 1
+ch <= 10
+ch >= 1
+sizeof1 > strlen1

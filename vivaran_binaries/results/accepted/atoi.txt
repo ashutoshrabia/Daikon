@@ -1,0 +1,9 @@
+(isStringp1 == 1)  ==>  (sizeof1 >= 2)
+(isStringp1 == 1)  ==>  (sizeof1 > strlen1)
+(isStringp1 == 1)  ==>  (strlen1 <= 9)
+p1Null == 0
+isValidp1 == 1
+sizeof1 <= 10
+sizeof1 >= 1
+strlen1 <= 10
+strlen1 >= 1

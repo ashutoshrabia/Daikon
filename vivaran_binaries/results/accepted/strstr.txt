@@ -1,0 +1,17 @@
+(isStringp1 == 1)  ==>  (sizeof1 > strlen1)
+p1Null == p2Null
+isValidp1 == isValidp2
+isValidp1 == isStringp2
+isValidp1 == isDisjointp1p2
+p1Null == 0
+isValidp1 == 1
+sizeof1 <= 10
+sizeof1 >= 1
+sizeof2 <= 10
+sizeof2 >= 2
+strlen1 <= 10
+strlen1 >= 1
+strlen2 <= 9
+strlen2 >= 1
+sizeof1 >= strlen2
+sizeof2 > strlen2

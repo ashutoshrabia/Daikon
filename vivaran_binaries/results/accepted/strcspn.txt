@@ -1,0 +1,45 @@
+(isDisjointp1p2 == 1)  ==>  (strlen2 <= 9)
+(isDisjointp1p2 && isStringp1)  ==>  (sizeof1 >= 2)
+(isStringp2 == 0)  ==>  (sizeof1 >= 3)
+(isStringp2 == 0)  ==>  (strlen1 <= 9)
+(isStringp1 == 0)  ==>  (sizeof2 >= 2)
+(isStringp1 == 0)  ==>  (isValidp2 == 1)
+(isDisjointp1p2 && isStringp1)  ==>  (isStringp2 == 1)
+(isDisjointp1p2 && isStringp1)  ==>  (isValidp2 == 1)
+(isDisjointp1p2 == 0)  ==>  (sizeof1 >= 3)
+(isDisjointp1p2 == 0)  ==>  (strlen1 >= 2)
+(isStringp1 == 1)  ==>  (sizeof1 > strlen1)
+(isDisjointp1p2 == 1)  ==>  (sizeof2 >= 2)
+(isStringp1 == 0)  ==>  (isDisjointp1p2 == 1)
+(isValidp2 == 0)  ==>  (strlen1 <= 9)
+(isStringp1 == 0)  ==>  (sizeof2 > strlen2)
+(isValidp2 == 0)  ==>  (strlen1 >= 2)
+(isValidp2 == 0)  ==>  (isDisjointp1p2 == 0)
+(isValidp2 == 0)  ==>  (sizeof1 > strlen1)
+(isDisjointp1p2 && isStringp1)  ==>  (sizeof1 > strlen1)
+(isDisjointp1p2 && isStringp1)  ==>  (sizeof2 >= 2)
+(isDisjointp1p2 == 1)  ==>  (sizeof2 > strlen2)
+(isStringp2 == 0)  ==>  (isDisjointp1p2 == 0)
+(isDisjointp1p2 == 0)  ==>  (not(isStringp2 && isDisjointp1p2))
+(isDisjointp1p2 && isStringp1)  ==>  (strlen2 <= 9)
+(isStringp1 == 1)  ==>  (sizeof1 >= 2)
+(isStringp1 == 0)  ==>  (strlen2 <= 9)
+(isStringp2 == 0)  ==>  (strlen1 >= 2)
+(isStringp1 == 0)  ==>  (isStringp2 == 1)
+(isDisjointp1p2 == 0)  ==>  (isStringp1 == 1)
+(isDisjointp1p2 == 0)  ==>  (sizeof1 > strlen1)
+(isDisjointp1p2 == 0)  ==>  (strlen1 <= 9)
+(isValidp2 == 0)  ==>  (sizeof1 >= 3)
+(isStringp2 == 0)  ==>  (sizeof1 > strlen1)
+(isDisjointp1p2 && isStringp1)  ==>  (sizeof2 > strlen2)
+p1Null == p2Null
+p1Null == 0
+isValidp1 == 1
+sizeof1 <= 10
+sizeof1 >= 1
+sizeof2 <= 10
+sizeof2 >= 1
+strlen1 <= 10
+strlen1 >= 1
+strlen2 <= 10
+strlen2 >= 1

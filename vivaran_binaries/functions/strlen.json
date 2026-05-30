@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "p1": "char pointer"
+    },
+    "name": "strlen",
+    "return_type": "size_t",
+    "types_dict": {
+        "Bool": [
+            "p1Null",
+            "isValidp1",
+            "isStringp1"
+        ],
+        "NumInt": [
+            "sizeof1",
+            "strlen1"
+        ]
+    }
+}

@@ -1,0 +1,10 @@
+sizeof1 <= 10
+sizeof1 >= 1
+sizeof2 <= 10
+sizeof2 >= 1
+strlen1 <= 10
+strlen1 >= 1
+strlen2 <= 10
+strlen2 >= 1
+n <= 10
+n >= 1

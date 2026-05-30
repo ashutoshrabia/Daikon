@@ -1,0 +1,1 @@
+Ollama failed: HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [Errno 111] Connection refused"))

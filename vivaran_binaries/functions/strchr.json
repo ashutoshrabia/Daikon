@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "p1": "char pointer",
+        "ch": "int"
+    },
+    "name": "strchr",
+    "return_type": "char pointer",
+    "types_dict": {
+        "Bool": [
+            "p1Null",
+            "isValidp1",
+            "isStringp1"
+        ],
+        "NumInt": [
+            "sizeof1",
+            "strlen1",
+            "ch"
+        ]
+    }
+}
